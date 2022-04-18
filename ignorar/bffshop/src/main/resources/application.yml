@@ -1,0 +1,16 @@
+server:
+    port: 8084
+
+ spring:
+  application:
+    name: bffshop
+  devtools:
+    restart:
+      log-condition-evaluation-delta: false
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka

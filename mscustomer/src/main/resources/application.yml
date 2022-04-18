@@ -1,0 +1,37 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/usuarios
+        username: postgres
+        password: root
+    jpa:
+        show-sql: true
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+
+        hibernate:
+            ddl-auto: update
+    
+
+    cloud:
+        config:
+            enabled: false
+            uri: http://localhost:8888
+    application:
+        name: customer
+    profiles:
+        active: default
+        
+management:
+    security:
+        enabled: false
+    health:
+        consul:
+            enabled: false
+
+eureka:
+    client:
+        register-with-eureka: true
+        fetch-registry: true
+        service-url:
+            defaultZone: http://localhost:8761/eureka

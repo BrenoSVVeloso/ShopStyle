@@ -1,0 +1,9 @@
+spring:
+    cloud:
+        config:
+            server:
+                git:
+                    uri: https://github.com/BrenoSVVeloso/microservice-repo
+                    search-paths: checkout
+server:
+    port: 8888
