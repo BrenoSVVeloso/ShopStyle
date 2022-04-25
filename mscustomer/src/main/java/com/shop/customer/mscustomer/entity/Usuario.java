@@ -105,4 +105,9 @@ public class Usuario implements UserDetails{
         
         return this.active;
     }
+
+    public void setPerfis(String string, Integer integer) {
+        Perfil perfil = new Perfil(integer, "admin");
+        this.perfis.add(perfil);
+    }
 }   

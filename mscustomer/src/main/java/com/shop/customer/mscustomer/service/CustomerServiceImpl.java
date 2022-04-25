@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import com.netflix.discovery.converters.Auto;
 import com.shop.customer.mscustomer.dto.LoginFormDTO;
 import com.shop.customer.mscustomer.dto.TokenDTO;
 import com.shop.customer.mscustomer.dto.UsuarioDTO;
@@ -51,6 +50,9 @@ public class CustomerServiceImpl implements CustomerService{
         try {
             Authentication authentication = authenticationManager.authenticate(dadosLogin);
             String token = tokenService.gerarToken(authentication);
+
+            Usuario usuario = (Usuario) autenticacaoService.loadUserByUsername(body.getEmail());
+            usuario.setPerfis("perfis", usuario.getId());
             return new TokenDTO(token,"Bearer");
         } catch (AuthenticationException e) {
             throw new ExceptionResponse(400, e.getMessage());

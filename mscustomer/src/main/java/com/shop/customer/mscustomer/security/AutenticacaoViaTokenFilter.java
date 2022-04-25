@@ -11,21 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 import com.shop.customer.mscustomer.entity.Usuario;
 import com.shop.customer.mscustomer.repository.CustomerRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 	
-	@Autowired
 	private TokenService tokenService;
 
-	@Autowired
 	private CustomerRepository customerRepository;
 	
-	public AutenticacaoViaTokenFilter(TokenService tokenService) {
+	public AutenticacaoViaTokenFilter(TokenService tokenService, CustomerRepository customerRepository) {
 		this.tokenService = tokenService;
+		this.customerRepository = customerRepository;
 	}
 
 	@Override

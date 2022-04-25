@@ -1,7 +1,5 @@
 package com.shop.customer.mscustomer.dto;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;

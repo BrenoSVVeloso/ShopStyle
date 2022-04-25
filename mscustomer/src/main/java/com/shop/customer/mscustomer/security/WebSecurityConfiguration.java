@@ -1,5 +1,7 @@
 package com.shop.customer.mscustomer.security;
 
+import com.shop.customer.mscustomer.repository.CustomerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,13 +10,21 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AutenticacaoService autenticacaoService;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Override
     @Bean
@@ -33,14 +43,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .antMatchers("/").permitAll()
         .antMatchers(HttpMethod.POST,"/v1/users").permitAll()
         .antMatchers(HttpMethod.POST, "/v1/login").permitAll()
-        .antMatchers(HttpMethod.GET,"/v1/users/:{id}").permitAll()
-        .antMatchers(HttpMethod.PUT,"/v1/users/:{id}").permitAll()
-        .antMatchers(HttpMethod.GET,"/v1/products/:{id}").permitAll()
-        .antMatchers(HttpMethod.GET,"/v1/categories/:{id}/products").permitAll()
-        .antMatchers(HttpMethod.GET,"/v1/payments").permitAll()
-        .antMatchers(HttpMethod.POST,"/v1/purchases").permitAll()
-        .antMatchers(HttpMethod.GET,"/v1/historic/user/:{id}").permitAll()
-
-        .anyRequest().authenticated();
+        .antMatchers(HttpMethod.GET,"/v1/users/:{id}").authenticated()
+        .antMatchers(HttpMethod.PUT,"/v1/users/:{id}").authenticated()
+        .antMatchers(HttpMethod.GET,"/v1/products/:{id}").authenticated()
+        .antMatchers(HttpMethod.GET,"/v1/categories/:{id}/products").authenticated()
+        .antMatchers(HttpMethod.GET,"/v1/payments").authenticated()
+        .antMatchers(HttpMethod.POST,"/v1/purchases").authenticated()
+        .antMatchers(HttpMethod.GET,"/v1/historic/user/:{id}").authenticated()
+        .anyRequest()
+        .authenticated()
+        .and().csrf().disable()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, customerRepository), UsernamePasswordAuthenticationFilter.class);
     }
 }
