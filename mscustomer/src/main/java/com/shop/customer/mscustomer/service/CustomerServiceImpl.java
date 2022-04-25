@@ -4,16 +4,24 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import com.netflix.discovery.converters.Auto;
 import com.shop.customer.mscustomer.dto.LoginFormDTO;
+import com.shop.customer.mscustomer.dto.TokenDTO;
 import com.shop.customer.mscustomer.dto.UsuarioDTO;
 import com.shop.customer.mscustomer.dto.UsuarioFormDTO;
 import com.shop.customer.mscustomer.entity.Sex;
 import com.shop.customer.mscustomer.entity.Usuario;
 import com.shop.customer.mscustomer.exception.ExceptionResponse;
 import com.shop.customer.mscustomer.repository.CustomerRepository;
+import com.shop.customer.mscustomer.security.AutenticacaoService;
+import com.shop.customer.mscustomer.security.TokenService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -27,10 +35,26 @@ public class CustomerServiceImpl implements CustomerService{
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private AutenticacaoService autenticacaoService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Override
-    public LoginFormDTO saveLogin(LoginFormDTO body) {
-        // TODO Auto-generated method stub
-        return null;
+    public TokenDTO saveLogin(LoginFormDTO body) {
+
+        UsernamePasswordAuthenticationToken dadosLogin = body.converter();
+        try {
+            Authentication authentication = authenticationManager.authenticate(dadosLogin);
+            String token = tokenService.gerarToken(authentication);
+            return new TokenDTO(token,"Bearer");
+        } catch (AuthenticationException e) {
+            throw new ExceptionResponse(400, e.getMessage());
+        }
     }
 
     @Override

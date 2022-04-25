@@ -4,6 +4,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import com.shop.customer.mscustomer.dto.LoginFormDTO;
+import com.shop.customer.mscustomer.dto.TokenDTO;
 import com.shop.customer.mscustomer.dto.UsuarioDTO;
 import com.shop.customer.mscustomer.dto.UsuarioFormDTO;
 import com.shop.customer.mscustomer.service.CustomerService;
@@ -29,9 +30,9 @@ public class CustomerController {
     //Autorização??
     @PostMapping("/login")
     @Transactional
-    public ResponseEntity<LoginFormDTO> saveLogin(@Valid @RequestBody LoginFormDTO body){
-        LoginFormDTO login = customerService.saveLogin(body);
-        return ResponseEntity.ok(login);
+    public ResponseEntity<TokenDTO> saveLogin(@Valid @RequestBody LoginFormDTO body){
+        TokenDTO token = customerService.saveLogin(body);
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/users")

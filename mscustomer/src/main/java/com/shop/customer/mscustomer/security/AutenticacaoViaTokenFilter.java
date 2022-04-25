@@ -1,14 +1,15 @@
-package com.microservice.bffshop.security;
+package com.shop.customer.mscustomer.security;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.microservice.bffshop.client.CustomerClient;
-import com.microservice.bffshop.dto.customer.UserDTO;
+import com.shop.customer.mscustomer.entity.Usuario;
+import com.shop.customer.mscustomer.repository.CustomerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,10 +18,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 	
+	@Autowired
 	private TokenService tokenService;
 
 	@Autowired
-	private CustomerClient customerClient;
+	private CustomerRepository customerRepository;
 	
 	public AutenticacaoViaTokenFilter(TokenService tokenService) {
 		this.tokenService = tokenService;
@@ -39,9 +41,11 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
 	private void autenticarUsuario(String token) {
 		Integer idUsuario = tokenService.getIdUsuario(token);
-		UserDTO userDTO = this.customerClient.getUser(idUsuario);
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDTO, null, userDTO.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		Optional<Usuario> user = this.customerRepository.findById(idUsuario);
+		if(user.isPresent()){
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user.get(), null, user.get().getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
 	}
 
 	private String recuperarToken(HttpServletRequest request) {

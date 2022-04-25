@@ -1,9 +1,9 @@
-package com.microservice.bffshop.security;
+package com.shop.customer.mscustomer.security;
 
 import java.util.Optional;
 
-import com.microservice.bffshop.client.CustomerClient;
-import com.microservice.bffshop.dto.customer.UserDTO;
+import com.shop.customer.mscustomer.entity.Usuario;
+import com.shop.customer.mscustomer.repository.CustomerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,14 +13,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AutenticacaoService implements UserDetailsService {
-	
+
 	@Autowired
-	private CustomerClient customerClient;
+	private CustomerRepository customerRepository; 
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserDTO usuario = customerClient.findByEmail(username);
-		return (UserDetails) usuario;
+		Optional<Usuario> oUsuario = customerRepository.findByEmail(username);
+		if(oUsuario.isPresent()){
+			return oUsuario.get();
+		}else{
+			throw new UsernameNotFoundException("Dados inválidos");
+		}
+		
+		
 	}
 	
 	
