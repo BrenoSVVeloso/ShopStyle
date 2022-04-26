@@ -26,8 +26,6 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-
-    //Autorização??
     @PostMapping("/login")
     @Transactional
     public ResponseEntity<TokenDTO> saveLogin(@Valid @RequestBody LoginFormDTO body){

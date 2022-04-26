@@ -4,9 +4,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.microservice.bffshop.dto.TokenDTO;
 import com.microservice.bffshop.dto.catalog.ProductDTO;
 import com.microservice.bffshop.dto.checkout.PaymentDTO;
 import com.microservice.bffshop.dto.checkout.PurchaseFormDTO;
+import com.microservice.bffshop.dto.customer.LoginFormDTO;
 import com.microservice.bffshop.dto.customer.UserDTO;
 import com.microservice.bffshop.dto.customer.UserFormDTO;
 import com.microservice.bffshop.dto.history.HistoryDTO;
@@ -26,5 +28,7 @@ public interface BffShopService {
     void savePurchases(@Valid PurchaseFormDTO body);
 
     HistoryDTO getHistory(int id);
+
+    TokenDTO saveLogin(@Valid LoginFormDTO body);
     
 }

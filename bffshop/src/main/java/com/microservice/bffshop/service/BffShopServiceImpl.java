@@ -8,9 +8,11 @@ import com.microservice.bffshop.client.CatalogClient;
 import com.microservice.bffshop.client.CheckoutClient;
 import com.microservice.bffshop.client.CustomerClient;
 import com.microservice.bffshop.client.HistoryClient;
+import com.microservice.bffshop.dto.TokenDTO;
 import com.microservice.bffshop.dto.catalog.ProductDTO;
 import com.microservice.bffshop.dto.checkout.PaymentDTO;
 import com.microservice.bffshop.dto.checkout.PurchaseFormDTO;
+import com.microservice.bffshop.dto.customer.LoginFormDTO;
 import com.microservice.bffshop.dto.customer.UserDTO;
 import com.microservice.bffshop.dto.customer.UserFormDTO;
 import com.microservice.bffshop.dto.history.HistoryDTO;
@@ -70,6 +72,12 @@ public class BffShopServiceImpl implements BffShopService{
     @Override
     public HistoryDTO getHistory(int id) {
         return this.historyClient.getHistory(id);
+    }
+
+    @Override
+    public TokenDTO saveLogin(@Valid LoginFormDTO body) {
+        
+        return this.customerClient.saveLogin(body);
     }
     
     

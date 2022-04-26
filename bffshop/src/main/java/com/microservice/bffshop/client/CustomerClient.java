@@ -2,6 +2,8 @@ package com.microservice.bffshop.client;
 
 import javax.validation.Valid;
 
+import com.microservice.bffshop.dto.TokenDTO;
+import com.microservice.bffshop.dto.customer.LoginFormDTO;
 import com.microservice.bffshop.dto.customer.UserDTO;
 import com.microservice.bffshop.dto.customer.UserFormDTO;
 
@@ -27,4 +29,6 @@ public interface CustomerClient {
     @GetMapping("/v1/users/email/:{id}")
     UserDTO findByEmail(@PathVariable String id);
 
+    @PostMapping("/v1/login")
+    TokenDTO saveLogin(@Valid LoginFormDTO body);
 }
