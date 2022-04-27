@@ -52,7 +52,6 @@ public class CustomerServiceImpl implements CustomerService{
             String token = tokenService.gerarToken(authentication);
 
             Usuario usuario = (Usuario) autenticacaoService.loadUserByUsername(body.getEmail());
-            usuario.setPerfis("perfis", usuario.getId());
             return new TokenDTO(token,"Bearer");
         } catch (AuthenticationException e) {
             throw new ExceptionResponse(400, e.getMessage());
